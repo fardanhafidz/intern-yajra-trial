@@ -22,7 +22,7 @@ class ChildFactory extends Factory
         return [
             'first_name' => $names[0],
             'last_name' => $names[1],
-            'parent_id' => rand(1, 3000)
+            'parent_id' => rand(1, 100)
         ];
     }
 }

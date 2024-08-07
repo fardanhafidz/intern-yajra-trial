@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Children DataTable</title>
+    <title>Show Children</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -19,10 +19,8 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Parent</th>
                     <th>First Name</th>
                     <th>Last Name</th>
-                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -43,29 +41,26 @@
     <script src="https://cdn.datatables.net/v/bs4/dt-2.1.3/datatables.min.js"></script>
 
     <script>
+        var childId = @json($id);
+        var url = '{{ route('getDataChild', ':id') }}'
+    </script>
+
+    <script>
         $(document).ready(function() {
             $('#myTable').DataTable({
                 stateSave: true,
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route('childData') }}',
+                ajax: url.replace(':id', childId),
                 columns: [{
                     data: 'id',
                     name: 'id'
-                }, {
-                    data: 'parent_name',
-                    name: 'parent_name'
                 }, {
                     data: 'first_name',
                     name: 'first_name'
                 }, {
                     data: 'last_name',
                     name: 'last_name'
-                }, {
-                    data: 'action',
-                    name: 'action',
-                    orderable: false,
-                    searchable: false
                 }]
             });
         });

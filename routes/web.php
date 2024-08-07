@@ -1,30 +1,25 @@
 <?php
 
+use App\Http\Controllers\ChildController;
+use App\Http\Controllers\ParentController;
 use App\Models\Child;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Yajra\DataTables\Facades\DataTables;
 
-Route::get('/', function () {
-    return view('parent');
-})->name('tableParent');
+Route::get('/', [ParentController::class, 'parent'])->name('parent');
+Route::get('/data', [ParentController::class, 'getDataParent'])->name('data');
 
-Route::get('/data', function () {
-    $parentData = DB::table('users')
-        ->join('users', 'children.parent_id', '=', 'users.id')
-        ->select(['children.*', 'users.name as parent_name']);
-    return Datatables::of($parentData)
-        ->filterColumn('parent_name', function ($query, $keyword) {
-            $query->where('users.name', 'like', "%{$keyword}%");
-        })
-        ->addColumn('action', 'action')
-        ->toJson();
-})->name('data');
+Route::get('/export-pdf', [ParentController::class, 'exportPdf'])->name('exportPdf');
+Route::get('/test-export-pdf', [ParentController::class, 'testExportPdf'])->name('testExportPdf');
 
 Route::get('/{id}/edit-data', function ($id) {
     dd('Edit data dengan id: ' . $id);
 })->name('editData');
+
+Route::get('/{id}/children', [ChildController::class, 'showChild'])->name('showChildren');
+Route::get('/{id}/children-data', [ChildController::class, 'getDataChild'])->name('getDataChild');
 
 ////////////////////////////////
 
@@ -40,6 +35,6 @@ Route::get('/child-data', function () {
         ->filterColumn('parent_name', function ($query, $keyword) {
             $query->where('users.name', 'like', "%{$keyword}%");
         })
-        ->addColumn('action', 'action')
+        ->addColumn('action', 'edit')
         ->make(true);
 })->name('childData');
